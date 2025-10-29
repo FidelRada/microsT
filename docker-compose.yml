@@ -1,0 +1,79 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 60910990
+      POSTGRES_DB: topicos_db
+    ports:
+      - "5433:5432"   # Tu máquina:5433 → Contenedor:5432
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB} -h localhost || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  app:
+    # 🚨 Antes: build: . (Asumía el Dockerfile estaba en inscripciones/)
+    build: ./inscripciones # <-- CAMBIO AQUÍ: Ahora es relativo a la nueva ubicación
+    depends_on:
+      - db
+    environment:
+      DB_HOST: db
+      DB_USER: postgres
+      DB_PASSWORD: 60910990
+      DB_NAME: topicos_db
+      DB_PORT: 5432
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      PORT: 3001
+    ports:
+      - "3001:3001"
+    # 🚨 Antes: - .:/usr/src/app (Asumía el código estaba en inscripciones/)
+    volumes:
+      - ./inscripciones:/usr/src/app # <-- CAMBIO AQUÍ: Montar el código de inscripciones
+    command: npm run dev:reset
+    restart: always
+
+  gateway:
+    # 🚨 Antes: build: ../gateway (Asumía que el Dockerfile de gateway estaba un nivel arriba de inscripciones/)
+    build: ./gateway # <-- CAMBIO AQUÍ: Ahora es relativo a la nueva ubicación (asumiendo que gateway está al mismo nivel que inscripciones)
+    depends_on:
+      - app
+    environment:
+      PORT: 3000
+    ports:
+      - "3000:3000"
+    # 🚨 Antes: - .:/usr/src/app (Probablemente errónea antes, o asumiendo que el contexto era el mismo)
+    # Asumo que quieres montar el código de gateway:
+    volumes:
+      - ./gateway:/usr/src/app # <-- CAMBIO AQUÍ: Montar el código de gateway
+    command: npm run dev
+    restart: always
+
+  mi_frontend:
+    # 🚨 Antes: build: ../mi_frontend/
+    build: ./mi_frontend/ # <-- CAMBIO AQUÍ: Ahora es relativo a la nueva ubicación
+    depends_on:
+      - gateway
+    environment:
+      PORT: 5173
+    ports:
+      - "5173:80"
+    # Las secciones 'volumes' y 'command' estaban comentadas, las dejamos así.
+    restart: always
+
+  redis:
+    image: redis:7-alpine
+    restart: always
+    volumes:
+      - redisdata:/data
+
+volumes:
+  pgdata:
+  redisdata:

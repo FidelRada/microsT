@@ -1,0 +1,23 @@
+{
+  "development": {
+    "username": "postgres",
+    "password": "60910990",
+    "database": "topicos_db",
+    "host": "db",
+    "dialect": "postgres"
+  },
+  "test": {
+    "username": "postgres",
+    "password": "60910990",
+    "database": "topicos_db",
+    "host": "db",
+    "dialect": "postgres"
+  },
+  "production": {
+    "username": "postgres",
+    "password": "60910990",
+    "database": "topicos_db",
+    "host": "db",
+    "dialect": "postgres"
+  }
+}

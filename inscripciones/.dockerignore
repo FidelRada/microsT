@@ -1,0 +1,17 @@
+node_modules
+npm-debug.log
+.DS_Store
+coverage
+logs
+*.log
+dist
+build
+/.git
+.idea
+.vscode
+docker-compose.override.yml
+**/node_modules
+/*.tgz
+tmp
+secrets
+/*.sqlite

@@ -1,0 +1,5 @@
+VITE_API_BASE_URL=http://gateway:3000/api
+VITE_API_INSCRIPCION_TASK_URL=http://gateway:3000/api/inscripcion/tasks
+VITE_API_GET_RESULTADO_TAREA_URL=http://gateway:3000/api/inscripcion/tasks/gettask
+VITE_API_GET_ESTATUS_TAREA_URL=http://gateway:3000/api/inscripcion/tasks/status/
+VITE_API_INSCRIPCION_BASE_URL=http://gateway:3000/api/inscripcion

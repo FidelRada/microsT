@@ -1,0 +1,21 @@
+# ------------------------------------
+# Dockerfile para ENTORNOS DE DESARROLLO (DEV)
+# ------------------------------------
+# Usamos una imagen de Node.js como base
+FROM node:20-alpine
+
+# Establece el directorio de trabajo dentro del contenedor
+WORKDIR /usr/src/app
+
+# Copia los archivos de configuración de dependencias
+COPY package.json package-lock.json ./
+
+# Instala las dependencias.
+# Nota: La carpeta 'node_modules' se generará aquí.
+RUN npm install
+
+# Exponemos el puerto de desarrollo de Vite
+EXPOSE 5173
+
+# El comando de inicio ('npm run dev') se define en el docker-compose.yml
+# CMD ["npm", "run", "dev"]  <-- Esto se sobrescribe por el 'command' en Compose
