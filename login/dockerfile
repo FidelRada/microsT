@@ -1,0 +1,23 @@
+# Usa una imagen base de Node.js
+FROM node:23.9.0-alpine
+
+# Crea el directorio de trabajo dentro del contenedor
+WORKDIR /usr/src/app
+
+# Copia los archivos de definición de dependencias (package.json y package-lock.json)
+# Esto optimiza el caché de Docker: si las dependencias no cambian, no reinstala.
+COPY package*.json ./
+
+# Instala las dependencias del proyecto
+RUN npm install
+
+# Copia el resto del código de la aplicación
+COPY . .
+
+# Expone el puerto en el que corre tu aplicación Express
+# En tu caso, es el puerto 3002
+EXPOSE 3002
+
+# Define el comando para iniciar la aplicación
+# Este comando debe coincidir con el que usas en docker-compose (ej. npm run dev o node ./bin/www)
+CMD [ "npm", "run", "dev" ]
